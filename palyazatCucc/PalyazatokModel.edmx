@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PalyazatokModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="koltsegtipus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="megnevezes" Type="varchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="palyazat">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="tervezetA" Type="int" />
+          <Property Name="tervezetC" Type="int" />
+        </EntityType>
+        <EntityType Name="szamla">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="szamlaszam" Type="varchar" MaxLength="9" />
+          <Property Name="datum" Type="date" />
+          <Property Name="ertek" Type="int" />
+          <Property Name="palyazatId" Type="int" />
+          <Property Name="koltsegtipusId" Type="varchar" MaxLength="3" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'palyazatok.dbo.palyazatokAllapota' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="palyazatokAllapota">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="keretosszeg" Type="int" />
+          <Property Name="szamlakSzama" Type="int" />
+          <Property Name="szamlakOsszege" Type="int" />
+        </EntityType>
+        <Association Name="FK__szamla__koltsegt__286302EC">
+          <End Role="koltsegtipus" Type="Self.koltsegtipus" Multiplicity="0..1" />
+          <End Role="szamla" Type="Self.szamla" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="koltsegtipus">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="szamla">
+              <PropertyRef Name="koltsegtipusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__szamla__palyazat__276EDEB3">
+          <End Role="palyazat" Type="Self.palyazat" Multiplicity="0..1" />
+          <End Role="szamla" Type="Self.szamla" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="palyazat">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="szamla">
+              <PropertyRef Name="palyazatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PalyazatokModelStoreContainer">
+          <EntitySet Name="koltsegtipus" EntityType="Self.koltsegtipus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="palyazat" EntityType="Self.palyazat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="szamla" EntityType="Self.szamla" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="palyazatokAllapota" EntityType="Self.palyazatokAllapota" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [palyazatokAllapota].[id] AS [id], 
+    [palyazatokAllapota].[keretosszeg] AS [keretosszeg], 
+    [palyazatokAllapota].[szamlakSzama] AS [szamlakSzama], 
+    [palyazatokAllapota].[szamlakOsszege] AS [szamlakOsszege]
+    FROM [dbo].[palyazatokAllapota] AS [palyazatokAllapota]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__szamla__koltsegt__286302EC" Association="Self.FK__szamla__koltsegt__286302EC">
+            <End Role="koltsegtipus" EntitySet="koltsegtipus" />
+            <End Role="szamla" EntitySet="szamla" />
+          </AssociationSet>
+          <AssociationSet Name="FK__szamla__palyazat__276EDEB3" Association="Self.FK__szamla__palyazat__276EDEB3">
+            <End Role="palyazat" EntitySet="palyazat" />
+            <End Role="szamla" EntitySet="szamla" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PalyazatokModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="koltsegtipus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="megnevezes" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="szamla" Relationship="Self.FK__szamla__koltsegt__286302EC" FromRole="koltsegtipus" ToRole="szamla" />
+        </EntityType>
+        <EntityType Name="palyazat">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="tervezetA" Type="Int32" />
+          <Property Name="tervezetC" Type="Int32" />
+          <NavigationProperty Name="szamla" Relationship="Self.FK__szamla__palyazat__276EDEB3" FromRole="palyazat" ToRole="szamla" />
+        </EntityType>
+        <EntityType Name="szamla">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="szamlaszam" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Name="datum" Type="DateTime" Precision="0" />
+          <Property Name="ertek" Type="Int32" />
+          <Property Name="palyazatId" Type="Int32" />
+          <Property Name="koltsegtipusId" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="koltsegtipus" Relationship="Self.FK__szamla__koltsegt__286302EC" FromRole="szamla" ToRole="koltsegtipus" />
+          <NavigationProperty Name="palyazat" Relationship="Self.FK__szamla__palyazat__276EDEB3" FromRole="szamla" ToRole="palyazat" />
+        </EntityType>
+        <Association Name="FK__szamla__koltsegt__286302EC">
+          <End Role="koltsegtipus" Type="Self.koltsegtipus" Multiplicity="0..1" />
+          <End Role="szamla" Type="Self.szamla" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="koltsegtipus">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="szamla">
+              <PropertyRef Name="koltsegtipusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__szamla__palyazat__276EDEB3">
+          <End Role="palyazat" Type="Self.palyazat" Multiplicity="0..1" />
+          <End Role="szamla" Type="Self.szamla" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="palyazat">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="szamla">
+              <PropertyRef Name="palyazatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PalyazatokEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="koltsegtipus" EntityType="Self.koltsegtipus" />
+          <EntitySet Name="palyazat" EntityType="Self.palyazat" />
+          <EntitySet Name="szamla" EntityType="Self.szamla" />
+          <AssociationSet Name="FK__szamla__koltsegt__286302EC" Association="Self.FK__szamla__koltsegt__286302EC">
+            <End Role="koltsegtipus" EntitySet="koltsegtipus" />
+            <End Role="szamla" EntitySet="szamla" />
+          </AssociationSet>
+          <AssociationSet Name="FK__szamla__palyazat__276EDEB3" Association="Self.FK__szamla__palyazat__276EDEB3">
+            <End Role="palyazat" EntitySet="palyazat" />
+            <End Role="szamla" EntitySet="szamla" />
+          </AssociationSet>
+          <EntitySet Name="palyazatokAllapota" EntityType="PalyazatokModel.palyazatokAllapota" />
+        </EntityContainer>
+        <EntityType Name="palyazatokAllapota">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="keretosszeg" Type="Int32" />
+          <Property Name="szamlakSzama" Type="Int32" />
+          <Property Name="szamlakOsszege" Type="Int32" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PalyazatokModelStoreContainer" CdmEntityContainer="PalyazatokEntities">
+          <EntitySetMapping Name="koltsegtipus">
+            <EntityTypeMapping TypeName="PalyazatokModel.koltsegtipus">
+              <MappingFragment StoreEntitySet="koltsegtipus">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="megnevezes" ColumnName="megnevezes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="palyazat">
+            <EntityTypeMapping TypeName="PalyazatokModel.palyazat">
+              <MappingFragment StoreEntitySet="palyazat">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="tervezetA" ColumnName="tervezetA" />
+                <ScalarProperty Name="tervezetC" ColumnName="tervezetC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="szamla">
+            <EntityTypeMapping TypeName="PalyazatokModel.szamla">
+              <MappingFragment StoreEntitySet="szamla">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="szamlaszam" ColumnName="szamlaszam" />
+                <ScalarProperty Name="datum" ColumnName="datum" />
+                <ScalarProperty Name="ertek" ColumnName="ertek" />
+                <ScalarProperty Name="palyazatId" ColumnName="palyazatId" />
+                <ScalarProperty Name="koltsegtipusId" ColumnName="koltsegtipusId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="palyazatokAllapota">
+            <EntityTypeMapping TypeName="PalyazatokModel.palyazatokAllapota">
+              <MappingFragment StoreEntitySet="palyazatokAllapota">
+                <ScalarProperty Name="szamlakOsszege" ColumnName="szamlakOsszege" />
+                <ScalarProperty Name="szamlakSzama" ColumnName="szamlakSzama" />
+                <ScalarProperty Name="keretosszeg" ColumnName="keretosszeg" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
